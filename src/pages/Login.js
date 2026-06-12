@@ -28,57 +28,147 @@
 
 // export default Login;
 
+// import { useState } from 'react';
+
+// function Login() {
+
+//   const [username, setUsername] = useState('');
+//   const [password, setPassword] = useState('');
+
+//   const handleLogin = (event) => {
+//     event.preventDefault();
+
+//     console.log('Username:', username);
+//     console.log('Password:', password);
+//   };
+
+//   return (
+//     <div>
+//       <h2>Login Page</h2>
+
+//       <form onSubmit={handleLogin}>
+
+//         <div>
+//           <label>Username:</label>
+//           <br />
+
+//           <input
+//             type="text"
+//             value={username}
+//             onChange={(e) => setUsername(e.target.value)}
+//           />
+//         </div>
+
+//         <br />
+
+//         <div>
+//           <label>Password:</label>
+//           <br />
+
+//           <input
+//             type="password"
+//             value={password}
+//             onChange={(e) => setPassword(e.target.value)}
+//           />
+//         </div>
+
+//         <br />
+
+//         <button type="submit">Login</button>
+
+//       </form>
+//     </div>
+//   );
+// }
+
+// export default Login;
+
 import { useState } from 'react';
+import api from '../services/api';
 
 function Login() {
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-  const handleLogin = (event) => {
-    event.preventDefault();
+    const handleLogin = async (event) => {
 
-    console.log('Username:', username);
-    console.log('Password:', password);
-  };
+        event.preventDefault();
 
-  return (
-    <div>
-      <h2>Login Page</h2>
+        try {
 
-      <form onSubmit={handleLogin}>
+            const response =
+                await api.post(
+                    '/api/auth/login',
+                    {
+                        username,
+                        password
+                    }
+                );
 
+            const token =
+                response.data.token;
+
+            localStorage.setItem(
+                'token',
+                token
+            );
+
+            alert('Login Successful');
+
+        } catch (error) {
+
+            alert('Login Failed');
+        }
+    };
+
+    return (
         <div>
-          <label>Username:</label>
-          <br />
 
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+            <h2>Login Page</h2>
+
+            <form onSubmit={handleLogin}>
+
+                <div>
+                    <label>Username</label>
+                    <br />
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={(e) =>
+                            setUsername(
+                                e.target.value
+                            )
+                        }
+                    />
+                </div>
+
+                <br />
+
+                <div>
+                    <label>Password</label>
+                    <br />
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) =>
+                            setPassword(
+                                e.target.value
+                            )
+                        }
+                    />
+                </div>
+
+                <br />
+
+                <button type="submit">
+                    Login
+                </button>
+
+            </form>
+
         </div>
-
-        <br />
-
-        <div>
-          <label>Password:</label>
-          <br />
-
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        <br />
-
-        <button type="submit">Login</button>
-
-      </form>
-    </div>
-  );
+    );
 }
 
 export default Login;

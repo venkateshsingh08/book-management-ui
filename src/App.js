@@ -5,7 +5,13 @@ import Register from './pages/Register';
 import Books from './pages/Books';
 
 function App() {
+
+  const logout = () => {
+    localStorage.removeItem('token');
+  };
+
   return (
+    
     <BrowserRouter>
       <div>
         <h1>Book Management Application</h1>
@@ -15,7 +21,10 @@ function App() {
           {' | '}
           <Link to="/register">Register</Link>
           {' | '}
-          <Link to="/books">Books</Link>
+          <Link to="/books">Books</Link>{' | '}
+          <button onClick={logout}>LOGOUT</button>
+
+          
         </nav>
 
         <hr />
